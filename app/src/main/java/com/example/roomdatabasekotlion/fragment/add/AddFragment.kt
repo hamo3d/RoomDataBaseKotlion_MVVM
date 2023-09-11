@@ -84,7 +84,6 @@ class AddFragment : Fragment() {
         val firstName = binding.firstNameEditText.text.toString()
         val lastName = binding.lastNameEditText.text.toString()
         val age = binding.editTextNumber.text.toString()
-
         if (inputCheck(firstName, lastName, age)) {
             val user = User(0, firstName, lastName, age.toInt())
             viewModel.addUser(user)

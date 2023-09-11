@@ -18,7 +18,6 @@ import com.example.roomdatabasekotlion.model.User
 import com.example.roomdatabasekotlion.viewmodel.UserViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-
 class ListFragment : Fragment(), UpdateClickListener {
 
     private lateinit var binding: FragmentListBinding
@@ -39,7 +38,6 @@ class ListFragment : Fragment(), UpdateClickListener {
         return binding.root
     }
 
-
     private fun setOnClickListener() {
         binding.floatingActionButton.setOnClickListener {
             findNavController().navigate(R.id.action_listFragment_to_addFragment)
@@ -50,7 +48,6 @@ class ListFragment : Fragment(), UpdateClickListener {
         adapter = ListAdapter(userList, this)
         binding.rec.adapter = adapter
         binding.rec.layoutManager = LinearLayoutManager(requireContext())
-
     }
 
     private fun getDataFromDatabase() {
@@ -58,38 +55,34 @@ class ListFragment : Fragment(), UpdateClickListener {
             userList.clear()
             userList.addAll(data)
             adapter.notifyDataSetChanged()
-
         })
     }
 
     override fun update(user: User) {
-        val user = User(user.id, user.firstName, user.lastName, user.age)
+        val updatedUser = User(user.id, user.firstName, user.lastName, user.age)
         val addFragment = AddFragment()
         val bundle = Bundle()
-        bundle.putParcelable("data_update", user)
+        bundle.putParcelable("data_update", updatedUser)
         bundle.putString("mode", "edit")
         addFragment.arguments = bundle
         findNavController().navigate(R.id.action_listFragment_to_addFragment, bundle)
-
     }
 
     override fun delete(user: User) {
         createDialog(user)
     }
 
-
     private fun createDialog(user: User) {
-        MaterialAlertDialogBuilder(requireContext()).setTitle("Delete selected User")
-            .setMessage("user will be deleted from your User.")
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Delete selected User")
+            .setMessage("User will be deleted from your list.")
             .setPositiveButton("Accept") { _, _ ->
-                Toast.makeText(activity,"Delete Success!",Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, "Delete Success!", Toast.LENGTH_LONG).show()
                 viewModel.deleteUser(user)
-
-            }.setNegativeButton("Decline") { _, _ ->
-                Toast.makeText(activity,"Filed Success!",Toast.LENGTH_LONG).show()
-
-        }.show()
+            }
+            .setNegativeButton("Decline") { _, _ ->
+                Toast.makeText(activity, "Delete Failed!", Toast.LENGTH_LONG).show()
+            }
+            .show()
     }
-
-
 }
